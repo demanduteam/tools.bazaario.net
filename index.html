@@ -3,208 +3,409 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دستیار هوشمند بازاریابی ویروسی | استراتژی وایرال</title>
+    <title>جعبه‌ابزار بازاریابی | Marketing Toolkit</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Fixed Lucide Script Source -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <style>
         body {
             font-family: 'Vazirmatn', sans-serif;
+            background-color: #f8fafc;
         }
         .gradient-text {
             background: linear-gradient(to right, #4f46e5, #9333ea);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        pre {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-        /* Custom Scrollbar for Textarea */
         .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: #1e293b; 
+            background: #f1f5f9; 
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #475569; 
+            background: #cbd5e1; 
             border-radius: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #64748b; 
+            background: #94a3b8; 
+        }
+        .tool-card {
+            transition: all 0.3s ease;
+        }
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+<body class="text-slate-800 h-screen overflow-hidden flex">
 
-    <!-- Header -->
-    <header class="w-full py-6 px-4 bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <i data-lucide="zap" class="text-indigo-600 w-8 h-8"></i>
-                <h1 class="text-xl font-bold text-slate-900">وایرال‌مِیکر <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full mr-2">هوش مصنوعی</span></h1>
+    <!-- Sidebar (Desktop) -->
+    <aside class="hidden md:flex flex-col w-64 bg-slate-900 text-slate-300 h-full flex-shrink-0">
+        <div class="p-6 border-b border-slate-800 flex items-center gap-3">
+            <div class="bg-indigo-600 p-2 rounded-lg">
+                <i data-lucide="layers" class="text-white w-6 h-6"></i>
             </div>
-            <a href="#generator" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                ساخت استراتژی
-            </a>
+            <span class="font-bold text-white text-lg tracking-wide">مارکتینگ‌پِلاس</span>
         </div>
-    </header>
 
-    <!-- Hero Section -->
-    <section class="px-4 py-16 md:py-24 text-center max-w-4xl mx-auto">
-        <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
-            ایده بعدی شما <br/>
-            <span class="gradient-text">باید وایرال شود</span>
-        </h1>
-        <p class="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-8">
-            ترکیبی از <strong>۴ تجربه واقعی بازار ایران</strong> و <strong>روانشناسی فروش</strong>.<br/>
-            دقیق‌ترین سناریوی تبلیغاتی را برای کسب‌وکارتان بسازید.
-        </p>
-        <div class="flex justify-center gap-4 flex-wrap">
-            <a href="#learn-more" class="flex items-center gap-2 text-slate-600 hover:text-indigo-600 transition-colors font-medium">
-                <i data-lucide="arrow-down-circle" class="w-5 h-5"></i>
-                چطور کار می‌کند؟
-            </a>
-        </div>
-    </section>
-
-    <!-- The 4 Models Section (NEW) -->
-    <section id="learn-more" class="bg-white py-16 px-4">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-12">
-                <h2 class="text-2xl md:text-3xl font-bold mb-4">۴ مدل اثبات شده در ایران</h2>
-                <p class="text-slate-500">الگوهای ویروسی که بر اساس تجربه واقعی استخراج شده‌اند</p>
-            </div>
+        <nav class="flex-1 overflow-y-auto py-6 px-3 space-y-1">
+            <button onclick="showView('dashboard')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition-colors text-right group" id="nav-dashboard">
+                <i data-lucide="layout-grid" class="w-5 h-5 group-hover:text-white"></i>
+                <span class="font-medium group-hover:text-white">داشبورد ابزارها</span>
+            </button>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Model 1 -->
-                <div class="p-6 border border-indigo-100 rounded-2xl bg-indigo-50/50">
-                    <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mb-4 text-indigo-600">
-                        <i data-lucide="mail"></i>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">۱. احترام VIP</h3>
-                    <p class="text-sm text-slate-600">ارسال کارت دعوت یا هدیه خاص که مخاطب برای پز دادن آن را استوری می‌کند.</p>
-                </div>
-                
-                <!-- Model 2 -->
-                <div class="p-6 border border-indigo-100 rounded-2xl bg-indigo-50/50">
-                    <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mb-4 text-indigo-600">
-                        <i data-lucide="users"></i>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">۲. مشارکت جمعی</h3>
-                    <p class="text-sm text-slate-600">مسابقات رأی‌گیری که شرکت‌کننده برای برنده شدن، خودش تبلیغ شما را می‌کند.</p>
-                </div>
+            <div class="pt-4 pb-2 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">ابزارهای هوشمند</div>
+            
+            <button onclick="showView('viral-tool')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-900/20 transition-all text-right" id="nav-viral">
+                <i data-lucide="zap" class="w-5 h-5"></i>
+                <span class="font-medium">استراتژی وایرال</span>
+            </button>
+            
+            <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition-colors text-right opacity-60 cursor-not-allowed group">
+                <i data-lucide="pen-tool" class="w-5 h-5"></i>
+                <span>کپشن‌نویس (به‌زودی)</span>
+                <i data-lucide="lock" class="w-3 h-3 mr-auto"></i>
+            </button>
+            
+            <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition-colors text-right opacity-60 cursor-not-allowed group">
+                <i data-lucide="hash" class="w-5 h-5"></i>
+                <span>هشتگ یاب (به‌زودی)</span>
+                <i data-lucide="lock" class="w-3 h-3 mr-auto"></i>
+            </button>
+        </nav>
 
-                <!-- Model 3 -->
-                <div class="p-6 border border-indigo-100 rounded-2xl bg-indigo-50/50">
-                    <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mb-4 text-indigo-600">
-                        <i data-lucide="scale"></i>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">۳. مقایسه جنجالی</h3>
-                    <p class="text-sm text-slate-600">مقایسه شفاف با رقبا (مثل خانگی vs صنعتی) که باعث بحث و طرفداری می‌شود.</p>
+        <div class="p-4 border-t border-slate-800">
+            <div class="flex items-center gap-3 p-2 rounded-lg bg-slate-800/50 border border-slate-700">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
+                    ME
                 </div>
-
-                <!-- Model 4 -->
-                <div class="p-6 border border-indigo-100 rounded-2xl bg-indigo-50/50">
-                    <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mb-4 text-indigo-600">
-                        <i data-lucide="unlock"></i>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">۴. تابوشکنی</h3>
-                    <p class="text-sm text-slate-600">گفتن حرف‌های مگو (مثل لیست قیمت‌ها) که دیگران آن را به عنوان "حرف دل" بازنشر می‌کنند.</p>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium text-white truncate">کاربر مهمان</p>
+                    <p class="text-xs text-slate-500 truncate">طرح رایگان</p>
                 </div>
             </div>
         </div>
-    </section>
+    </aside>
 
-    <!-- Generator Section -->
-    <section id="generator" class="py-16 px-4 bg-slate-50">
-        <div class="max-w-3xl mx-auto">
-            <div class="glass-panel p-8 rounded-3xl shadow-xl">
-                <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
-                    <i data-lucide="settings-2" class="text-indigo-600"></i>
-                    ساخت پرامت (دستور) اختصاصی
+    <!-- Main Content Area -->
+    <main class="flex-1 h-full overflow-y-auto bg-slate-50 relative custom-scrollbar">
+        <!-- Mobile Header -->
+        <div class="md:hidden flex items-center justify-between p-4 bg-white border-b border-slate-200 sticky top-0 z-20">
+            <div class="flex items-center gap-2">
+                <div class="bg-indigo-600 p-1.5 rounded-lg">
+                    <i data-lucide="layers" class="text-white w-5 h-5"></i>
+                </div>
+                <span class="font-bold text-slate-900">مارکتینگ‌پِلاس</span>
+            </div>
+            <button onclick="toggleMobileMenu()" class="p-2 text-slate-600 hover:bg-slate-100 rounded-lg">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- VIEW 1: DASHBOARD (Hub) -->
+        <div id="view-dashboard" class="p-6 md:p-10 max-w-7xl mx-auto fade-in">
+            <header class="mb-10">
+                <h1 class="text-3xl font-bold text-slate-900 mb-2">سلام، به جعبه‌ابزار رشد خوش آمدید 👋</h1>
+                <p class="text-slate-500 text-lg">کدام ابزار را برای شروع کمپین امروز انتخاب می‌کنید؟</p>
+            </header>
+
+            <!-- Featured Tool (Viral Generator) -->
+            <div class="mb-12">
+                <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <i data-lucide="star" class="w-4 h-4"></i>
+                    ابزار پیشنهادی
                 </h2>
-                <p class="mb-6 text-slate-600">مشخصات زیر را پر کنید تا دستور مخصوص هوش مصنوعی برای شما ساخته شود.</p>
-                
-                <div class="space-y-6">
-                    <!-- Input 1 -->
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">حوزه کاری شما چیست؟</label>
-                        <input type="text" id="businessInput" placeholder="مثال: فروش شال و روسری آنلاین، کافی‌شاپ، نرم‌افزار حسابداری..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none">
-                    </div>
-
-                    <!-- Input 2 -->
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">مشتریان هدف شما چه کسانی هستند؟</label>
-                        <input type="text" id="customerInput" placeholder="مثال: خانم‌های خانه‌دار ۲۵ تا ۴۰ سال، مدیران شرکت‌ها..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none">
-                    </div>
-
-                    <!-- Input 3 (New Content Type) -->
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">ترجیح می‌دهید نوع محتوا چه باشد؟</label>
-                        <div class="relative">
-                            <select id="contentTypeInput" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none appearance-none bg-white">
-                                <option value="mixed">فرقی نمی‌کند (بهترین گزینه را پیشنهاد بده)</option>
-                                <option value="stories">استوری و واتساپ (ساده و تعاملی)</option>
-                                <option value="text_image">پست‌های متنی و اسلایدی (بدون ویدیو)</option>
-                                <option value="simple_video">ویدیوهای ساده و رئال (بدون ادیت سنگین)</option>
-                            </select>
-                            <i data-lucide="chevron-down" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none"></i>
+                <div class="bg-white rounded-3xl p-1 shadow-xl border border-indigo-100 tool-card relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-50 rounded-full -mr-16 -mt-16 blur-3xl opacity-50 transition-opacity group-hover:opacity-70"></div>
+                    
+                    <div class="flex flex-col md:flex-row gap-6 p-6 md:p-8 relative z-10">
+                        <div class="w-16 h-16 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="zap" class="w-8 h-8"></i>
                         </div>
-                        <p class="text-xs text-slate-500 mt-2 mr-1">اگر امکان تولید ویدیوی حرفه‌ای ندارید، گزینه «استوری» یا «پست متنی» را انتخاب کنید.</p>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <h3 class="text-2xl font-bold text-slate-900">استراتژی وایرال‌میکر</h3>
+                                <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-2 py-1 rounded-full">هوش مصنوعی</span>
+                            </div>
+                            <p class="text-slate-600 leading-relaxed mb-6 max-w-2xl">
+                                با استفاده از روانشناسی فروش و ۴ مدل اثبات شده در بازار ایران، سناریوهای تبلیغاتی بسازید که مخاطب نتواند نادیده بگیرد. مناسب برای استوری، پست و ویدیو.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-sm flex items-center gap-1"><i data-lucide="check" class="w-3 h-3"></i> ایده استوری</span>
+                                <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-sm flex items-center gap-1"><i data-lucide="check" class="w-3 h-3"></i> سناریو ویدیو</span>
+                                <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-sm flex items-center gap-1"><i data-lucide="check" class="w-3 h-3"></i> تحلیل روانشناسی</span>
+                            </div>
+                            <button onclick="showView('viral-tool')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/30 flex items-center gap-2">
+                                شروع ساخت استراتژی
+                                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other Tools Grid -->
+            <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+                <i data-lucide="grid" class="w-4 h-4"></i>
+                سایر ابزارها
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Tool 2 (Coming Soon) -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-not-allowed">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center">
+                            <i data-lucide="pen-tool" class="w-6 h-6"></i>
+                        </div>
+                        <span class="bg-slate-100 text-slate-500 text-xs px-2 py-1 rounded-lg">به‌زودی</span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">کپشن‌نویس جادویی</h3>
+                    <p class="text-sm text-slate-500">نوشتن کپشن‌های تعاملی اینستاگرام در ۳ ثانیه.</p>
+                </div>
+
+                <!-- Tool 3 (Coming Soon) -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-not-allowed">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
+                            <i data-lucide="users" class="w-6 h-6"></i>
+                        </div>
+                        <span class="bg-slate-100 text-slate-500 text-xs px-2 py-1 rounded-lg">به‌زودی</span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">پرسونا ساز</h3>
+                    <p class="text-sm text-slate-500">شناسایی دقیق مخاطب هدف و علایق آنها.</p>
+                </div>
+
+                <!-- Tool 4 (Coming Soon) -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-not-allowed">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-green-100 text-green-600 flex items-center justify-center">
+                            <i data-lucide="bar-chart-2" class="w-6 h-6"></i>
+                        </div>
+                        <span class="bg-slate-100 text-slate-500 text-xs px-2 py-1 rounded-lg">به‌زودی</span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">تقویم محتوایی</h3>
+                    <p class="text-sm text-slate-500">برنامه‌ریزی ۳۰ روزه برای شبکه‌های اجتماعی.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 2: VIRAL TOOL (The Application) -->
+        <div id="view-viral-tool" class="hidden min-h-full flex flex-col fade-in">
+            <!-- Tool Header -->
+            <div class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+                <div class="flex items-center gap-3">
+                    <button onclick="showView('dashboard')" class="md:hidden p-2 -mr-2 text-slate-500">
+                        <i data-lucide="arrow-right"></i>
+                    </button>
+                    <div class="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center">
+                        <i data-lucide="zap" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-slate-900">وایرال‌مِیکر</h2>
+                        <p class="text-xs text-slate-500">موتور تولید ایده مبتنی بر ۴ مدل تجربی</p>
+                    </div>
+                </div>
+                <button onclick="showView('dashboard')" class="hidden md:flex items-center gap-2 text-sm text-slate-500 hover:text-indigo-600 transition-colors">
+                    <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                    بازگشت به داشبورد
+                </button>
+            </div>
+
+            <!-- Content Container -->
+            <div class="flex-1 p-4 md:p-8 max-w-5xl mx-auto w-full">
+                
+                <!-- Educational Cards (Collapsible) -->
+                <details class="group bg-white border border-slate-200 rounded-2xl mb-8 overflow-hidden">
+                    <summary class="flex items-center justify-between p-4 cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors select-none">
+                        <div class="flex items-center gap-2 font-bold text-slate-700">
+                            <i data-lucide="book-open" class="w-5 h-5 text-indigo-500"></i>
+                            <span>راهنمای مدل‌ها: چگونه هوش مصنوعی ایده می‌دهد؟</span>
+                        </div>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <div class="p-6 border-t border-slate-200">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <!-- Model 1 -->
+                            <div class="flex gap-3">
+                                <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0 text-sm font-bold">1</div>
+                                <div>
+                                    <h4 class="font-bold text-sm">احترام VIP</h4>
+                                    <p class="text-xs text-slate-500 mt-1">ارسال دعوت‌نامه یا هدیه که مخاطب برای پز دادن استوری کند.</p>
+                                </div>
+                            </div>
+                            <!-- Model 2 -->
+                            <div class="flex gap-3">
+                                <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0 text-sm font-bold">2</div>
+                                <div>
+                                    <h4 class="font-bold text-sm">مشارکت جمعی</h4>
+                                    <p class="text-xs text-slate-500 mt-1">مسابقاتی که کاربر برای برنده شدن، برای شما تبلیغ می‌کند.</p>
+                                </div>
+                            </div>
+                            <!-- Model 3 -->
+                            <div class="flex gap-3">
+                                <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0 text-sm font-bold">3</div>
+                                <div>
+                                    <h4 class="font-bold text-sm">مقایسه جنجالی</h4>
+                                    <p class="text-xs text-slate-500 mt-1">مقایسه شفاف با رقبا که باعث بحث و طرفداری می‌شود.</p>
+                                </div>
+                            </div>
+                            <!-- Model 4 -->
+                            <div class="flex gap-3">
+                                <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0 text-sm font-bold">4</div>
+                                <div>
+                                    <h4 class="font-bold text-sm">تابوشکنی</h4>
+                                    <p class="text-xs text-slate-500 mt-1">گفتن حرف‌های مگو (مثل قیمت) که دیگران آن را بازنشر می‌کنند.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-indigo-50 p-3 rounded-lg text-xs text-indigo-800 flex items-center gap-2">
+                            <i data-lucide="info" class="w-4 h-4"></i>
+                            هوش مصنوعی این مدل‌ها را با <b>۵ محرک احساسی (هویت، لذت، قدرت، امنیت، ارزش)</b> ترکیب می‌کند.
+                        </div>
+                    </div>
+                </details>
+
+                <!-- Input Panel -->
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 md:p-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">حوزه کاری شما</label>
+                            <input type="text" id="businessInput" placeholder="مثال: فروشگاه آنلاین شال، کافه..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none bg-slate-50 focus:bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">مخاطب هدف</label>
+                            <input type="text" id="customerInput" placeholder="مثال: خانم‌های خانه‌دار، دانشجویان..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none bg-slate-50 focus:bg-white">
+                        </div>
                     </div>
 
-                    <button onclick="generatePrompt()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:shadow-indigo-500/30 flex justify-center items-center gap-2">
-                        <i data-lucide="wand-2"></i>
-                        تولید دستور هوش مصنوعی
+                    <div class="mb-8">
+                        <label class="block text-sm font-bold text-slate-700 mb-2">نوع محتوا</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="contentType" value="mixed" class="peer sr-only" checked>
+                                <div class="p-3 rounded-xl border border-slate-200 peer-checked:border-indigo-500 peer-checked:bg-indigo-50 text-center transition-all h-full flex flex-col items-center justify-center gap-2 hover:bg-slate-50">
+                                    <i data-lucide="wand-2" class="w-5 h-5 text-slate-400 peer-checked:text-indigo-600"></i>
+                                    <span class="text-sm font-medium text-slate-600 peer-checked:text-indigo-800">پیشنهاد هوشمند</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="contentType" value="stories" class="peer sr-only">
+                                <div class="p-3 rounded-xl border border-slate-200 peer-checked:border-indigo-500 peer-checked:bg-indigo-50 text-center transition-all h-full flex flex-col items-center justify-center gap-2 hover:bg-slate-50">
+                                    <i data-lucide="instagram" class="w-5 h-5 text-slate-400 peer-checked:text-indigo-600"></i>
+                                    <span class="text-sm font-medium text-slate-600 peer-checked:text-indigo-800">استوری/واتساپ</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="contentType" value="text_image" class="peer sr-only">
+                                <div class="p-3 rounded-xl border border-slate-200 peer-checked:border-indigo-500 peer-checked:bg-indigo-50 text-center transition-all h-full flex flex-col items-center justify-center gap-2 hover:bg-slate-50">
+                                    <i data-lucide="image" class="w-5 h-5 text-slate-400 peer-checked:text-indigo-600"></i>
+                                    <span class="text-sm font-medium text-slate-600 peer-checked:text-indigo-800">پست اسلایدی</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="contentType" value="simple_video" class="peer sr-only">
+                                <div class="p-3 rounded-xl border border-slate-200 peer-checked:border-indigo-500 peer-checked:bg-indigo-50 text-center transition-all h-full flex flex-col items-center justify-center gap-2 hover:bg-slate-50">
+                                    <i data-lucide="video" class="w-5 h-5 text-slate-400 peer-checked:text-indigo-600"></i>
+                                    <span class="text-sm font-medium text-slate-600 peer-checked:text-indigo-800">ویدیو ساده</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button onclick="generatePrompt()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-indigo-500/30 flex justify-center items-center gap-2 text-lg">
+                        <i data-lucide="sparkles"></i>
+                        تولید استراتژی
                     </button>
                 </div>
 
-                <!-- Result Area (Hidden by default) -->
-                <div id="resultArea" class="hidden mt-8 pt-8 border-t border-slate-200 animation-fade-in">
-                    <div class="bg-slate-900 rounded-xl p-4 overflow-hidden relative">
-                        <div class="flex justify-between items-center mb-2 text-slate-400 text-xs uppercase tracking-wider">
-                            <span>Prompt Preview</span>
-                            <button onclick="copyToClipboard()" class="flex items-center gap-1 hover:text-white transition-colors">
-                                <i data-lucide="copy" class="w-4 h-4"></i>
-                                <span id="copyText">کپی متن</span>
+                <!-- Result Area -->
+                <div id="resultArea" class="hidden mt-8 animation-fade-in">
+                    <div class="bg-slate-900 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/10">
+                        <div class="px-4 py-3 bg-slate-800/50 border-b border-white/5 flex justify-between items-center">
+                            <span class="text-xs font-mono text-indigo-400 uppercase tracking-widest">AI Prompt Generated</span>
+                            <button onclick="copyToClipboard()" class="flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-lg">
+                                <i data-lucide="copy" class="w-3 h-3"></i>
+                                <span id="copyText">کپی دستور</span>
                             </button>
                         </div>
-                        <textarea id="promptOutput" readonly class="w-full h-64 bg-slate-900 text-slate-100 font-mono text-sm resize-none outline-none custom-scrollbar p-2 leading-relaxed"></textarea>
+                        <textarea id="promptOutput" readonly class="w-full h-80 bg-slate-900 text-slate-300 font-mono text-sm resize-none outline-none custom-scrollbar p-6 leading-relaxed"></textarea>
                     </div>
                     
-                    <div class="mt-4 bg-indigo-50 text-indigo-800 p-4 rounded-lg flex items-start gap-3">
-                        <i data-lucide="info" class="w-5 h-5 mt-0.5 shrink-0"></i>
-                        <div class="text-sm">
-                            <strong>مرحله بعدی:</strong> متن بالا را کپی کنید و در ChatGPT یا Claude ارسال کنید. هوش مصنوعی بر اساس <strong>تجربیات واقعی</strong> و <strong>روانشناسی</strong>، بهترین ایده وایرال را به شما می‌دهد.
+                    <div class="mt-4 p-4 rounded-xl bg-gradient-to-r from-indigo-50 to-white border border-indigo-100 flex gap-4 shadow-sm">
+                        <div class="bg-indigo-100 p-2 rounded-full h-fit text-indigo-600">
+                            <i data-lucide="message-square" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm mb-1">قدم بعدی چیست؟</h4>
+                            <p class="text-sm text-slate-600">متن بالا را کپی کنید و در چت‌بات‌هایی مثل <b>ChatGPT</b> یا <b>Claude</b> بفرستید. نتیجه یک سناریوی کامل و مهندسی شده خواهد بود.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-100 py-8 mt-auto">
-        <div class="max-w-5xl mx-auto px-4 text-center text-slate-500 text-sm">
-            <p>&copy; ۲۰۲۴ دستیار استراتژی وایرال. طراحی شده برای رشد کسب‌وکارهای ایران.</p>
-        </div>
-    </footer>
+    </main>
 
     <script>
-        // Initialize Lucide Icons
-        lucide.createIcons();
+        // Check if Lucide is loaded, if not, wait for it
+        function initIcons() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            } else {
+                // If not loaded yet, retry after 100ms
+                setTimeout(initIcons, 100);
+            }
+        }
+        
+        // Start checking when DOM is ready
+        document.addEventListener('DOMContentLoaded', initIcons);
 
+        // View Navigation Logic
+        function showView(viewName) {
+            const dashboard = document.getElementById('view-dashboard');
+            const viralTool = document.getElementById('view-viral-tool');
+            const navDashboard = document.getElementById('nav-dashboard');
+            const navViral = document.getElementById('nav-viral');
+
+            if (viewName === 'dashboard') {
+                dashboard.classList.remove('hidden');
+                viralTool.classList.add('hidden');
+                
+                // Update Sidebar Active State
+                navDashboard.classList.add('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-900/20');
+                navDashboard.classList.remove('hover:bg-slate-800');
+                
+                navViral.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-900/20');
+                navViral.classList.add('hover:bg-slate-800');
+            } else {
+                dashboard.classList.add('hidden');
+                viralTool.classList.remove('hidden');
+
+                // Update Sidebar Active State
+                navViral.classList.add('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-900/20');
+                navViral.classList.remove('hover:bg-slate-800');
+
+                navDashboard.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-900/20');
+                navDashboard.classList.add('hover:bg-slate-800');
+            }
+        }
+
+        // Initialize default view logic (Ensure correct styling on load)
+        showView('dashboard');
+
+        // Prompt Generation Logic
         function generatePrompt() {
             const business = document.getElementById('businessInput').value.trim();
             const customer = document.getElementById('customerInput').value.trim();
-            const contentType = document.getElementById('contentTypeInput').value;
+            const contentType = document.querySelector('input[name="contentType"]:checked').value;
             
             if (!business || !customer) {
                 alert('لطفاً حوزه کاری و مشخصات مشتریان را وارد کنید.');
@@ -241,7 +442,7 @@
 `;
             }
 
-            // The Viral Marketing Prompt Template
+            // The Prompt Template
             const promptTemplate = `
 **نقش:** تو یک استراتژیست ارشد بازاریابی ویروسی هستی که تخصصت ترکیب «تجربیات واقعی بازار ایران» با «روانشناسی فروش» (Neuromarketing) است.
 
@@ -262,7 +463,7 @@ ${formatInstruction}
 
 1.  **مدل «احترام و اعتبار VIP» (تجربه کارت دعوت):**
     * *مکانیزم:* ارسال یک دعوت‌نامه، هدیه یا پیام شخصی‌سازی شده برای مخاطب.
-    * *چرایی وایرال:* مخاطب برای نشان دادن پرستیژ اجتماعی و تشکر از احترام شما، آن را استوری می‌کند (مثل تجربه ارسال کارت دعوت اختصاصی نمایشگاه).
+    * *چرایی وایرال:* مخاطب برای نشان دادن پرستیژ اجتماعی و تشکر از احترام شما، آن را استوری می‌کند.
 2.  **مدل «مشارکت جمعی و مسابقه» (تجربه رأی‌گیری):**
     * *مکانیزم:* برگزاری مسابقه‌ای که برنده بر اساس "تعداد لایک یا کامنت" مشخص می‌شود.
     * *چرایی وایرال:* شرکت‌کننده برای برنده شدن، خودش تبدیل به رسانه شما می‌شود و از تمام دوستانش می‌خواهد که رأی دهند.
@@ -296,32 +497,22 @@ ${formatInstruction}
             document.getElementById('promptOutput').value = promptTemplate;
             const resultArea = document.getElementById('resultArea');
             resultArea.classList.remove('hidden');
-            
-            // Scroll to result
             resultArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
         function copyToClipboard() {
             const copyText = document.getElementById("promptOutput");
             copyText.select();
-            copyText.setSelectionRange(0, 99999); // For mobile devices
+            copyText.setSelectionRange(0, 99999);
+            document.execCommand('copy');
             
-            try {
-                document.execCommand('copy');
-                
-                // Visual feedback
-                const copyBtnText = document.getElementById("copyText");
-                const originalText = copyBtnText.innerText;
-                copyBtnText.innerText = "کپی شد!";
-                copyBtnText.parentElement.classList.add('text-green-400');
-                
-                setTimeout(() => {
-                    copyBtnText.innerText = originalText;
-                    copyBtnText.parentElement.classList.remove('text-green-400');
-                }, 2000);
-            } catch (err) {
-                console.error('Failed to copy text', err);
-            }
+            const copyBtnText = document.getElementById("copyText");
+            const originalText = copyBtnText.innerText;
+            copyBtnText.innerText = "کپی شد!";
+            
+            setTimeout(() => {
+                copyBtnText.innerText = originalText;
+            }, 2000);
         }
     </script>
 </body>
