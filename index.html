@@ -415,7 +415,7 @@
                             </div>
 
                             <div class="flex gap-2">
-                                <button onclick="addNewIdea()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg transition text-sm font-medium flex items-center">
+                                <button onclick="addNewIdea()" class="hidden md:flex bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg transition text-sm font-medium items-center">
                                     <i class="fas fa-plus mr-1 rtl:ml-1"></i> <span data-i18n="btn_add">افزودن ایده</span>
                                 </button>
                                 <button onclick="window.print()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition text-sm font-medium flex items-center">
@@ -605,6 +605,19 @@
                 
             </div>
         </div>
+        
+        <!-- Floating Action Button for Strategy Validator -->
+        <!-- Fixed button visible only when the validator view is active. -->
+        <button id="floating-add-btn" 
+                onclick="addNewIdea()" 
+                class="fixed bottom-6 right-6 
+                       bg-blue-600 hover:bg-blue-500 text-white 
+                       px-6 py-4 rounded-full shadow-2xl shadow-blue-500/50 
+                       transition-all duration-300 text-lg font-bold flex items-center gap-2 z-30 
+                       opacity-0 pointer-events-none">
+            <i class="fas fa-plus"></i>
+            <span data-i18n="btn_add_float">افزودن ایده جدید</span>
+        </button>
     </main>
 
     <!-- JAVASCRIPT LOGIC -->
@@ -640,6 +653,9 @@
                 'strategy-validator': document.getElementById('nav-strategy')
             };
 
+            // Floating Button Visibility Toggle
+            const floatingBtn = document.getElementById('floating-add-btn');
+
             // Deactivate all
             Object.keys(views).forEach(key => {
                 views[key].classList.add('hidden');
@@ -657,14 +673,23 @@
                     navs[viewName].classList.remove('hover:bg-slate-800');
                 }
                 
-                // Specific initialization for the Strategy Validator
                 if (viewName === 'strategy-validator') {
+                     // Show floating button
+                    floatingBtn.classList.remove('opacity-0', 'pointer-events-none');
+                    floatingBtn.classList.add('opacity-100');
                      // Ensure the new tool is initialized and rendered
                      if (typeof renderAll === 'function') {
-                        // Ensure it renders with the current language setting (default fa)
                         renderAll();
                      }
+                } else {
+                    // Hide floating button for other views
+                    floatingBtn.classList.remove('opacity-100');
+                    floatingBtn.classList.add('opacity-0', 'pointer-events-none');
                 }
+            } else {
+                // Hide floating button if no view is selected or unknown view
+                floatingBtn.classList.remove('opacity-100');
+                floatingBtn.classList.add('opacity-0', 'pointer-events-none');
             }
         }
 
@@ -838,7 +863,9 @@ ${formatInstruction}
                 leg_death: 'Bottom Right: Death Trap',
                 // Chart Labels
                 chart_risk: 'Risk',
-                chart_reward: 'Reward'
+                chart_reward: 'Reward',
+                btn_add_float: 'Add New Idea', // New translation
+                btn_remove: 'Remove Idea' // New translation
             },
             fa: {
                 app_title: '<i class="fas fa-chess-board mr-2 rtl:ml-2"></i> اولویت‌بندی ایده‌های کسب‌وکاری',
@@ -889,7 +916,9 @@ ${formatInstruction}
                 leg_death: 'پایین-راست: تله مرگ (اجتناب کنید)',
                 // Chart Labels
                 chart_risk: 'ریسک',
-                chart_reward: 'پاداش'
+                chart_reward: 'پاداش',
+                btn_add_float: 'افزودن ایده جدید', // New translation
+                btn_remove: 'حذف ایده' // New translation
             }
         };
 
@@ -990,6 +1019,16 @@ ${formatInstruction}
                 risk: 5, reward: 5
             });
             renderAll();
+            
+            // UX Improvement: Scroll to the bottom and focus on the new idea's name field
+            // Use setTimeout to ensure the DOM update finishes rendering the new row
+            setTimeout(() => {
+                const newRowInput = document.querySelector(`#ice-table-body tr:last-child input[type="text"]`);
+                if (newRowInput) {
+                    newRowInput.focus();
+                    newRowInput.select(); // Select the default text "ایده X"
+                }
+            }, 50);
         }
 
         function removeIdea(id) {
@@ -997,7 +1036,8 @@ ${formatInstruction}
             renderAll();
         }
 
-        function updateIdea(id, field, value) {
+        // UX Fix: This function now updates the state but only triggers a full re-render when necessary (like blur/oninput for non-text fields)
+        function updateIdea(id, field, value, redraw = true) {
             const idea = ideas.find(i => i.id === id);
             if (idea) {
                 if (field === 'name') {
@@ -1005,8 +1045,15 @@ ${formatInstruction}
                     if(currentLang === 'fa') idea.name_fa = value;
                     else idea.name = value;
                 }
-                else idea[field] = parseFloat(value) || 0;
-                renderAll(); 
+                else {
+                    // Numeric fields
+                    idea[field] = parseFloat(value) || 0;
+                }
+                
+                // Only re-render if explicitly requested (for blur or number inputs)
+                if (redraw) {
+                    renderAll(); 
+                }
             }
         }
 
@@ -1038,13 +1085,25 @@ ${formatInstruction}
                 const score = (idea.impact * idea.confidence * idea.ease);
                 const tr = document.createElement('tr');
                 tr.className = "border-b border-gray-100 hover:bg-gray-50 transition";
+                
+                // UX Fix: Use onblur for text input to prevent focus loss while typing.
                 tr.innerHTML = `
-                    <td class="p-2"><input type="text" value="${getName(idea)}" oninput="updateIdea(${idea.id}, 'name', this.value)" class="text-start font-medium bg-transparent border-none focus:ring-0 w-full hover:bg-white px-2 rounded"></td>
-                    <td class="p-2"><input type="number" min="1" max="10" value="${idea.impact}" onchange="updateIdea(${idea.id}, 'impact', this.value)"></td>
-                    <td class="p-2"><input type="number" min="1" max="10" value="${idea.confidence}" onchange="updateIdea(${idea.id}, 'confidence', this.value)"></td>
-                    <td class="p-2"><input type="number" min="1" max="10" value="${idea.ease}" onchange="updateIdea(${idea.id}, 'ease', this.value)"></td>
+                    <td class="p-2">
+                        <input type="text" 
+                               value="${getName(idea)}" 
+                               oninput="updateIdea(${idea.id}, 'name', this.value, false)" 
+                               onblur="updateIdea(${idea.id}, 'name', this.value, true)"
+                               class="text-start font-medium bg-transparent border-none focus:ring-0 w-full hover:bg-white px-2 rounded">
+                    </td>
+                    <td class="p-2"><input type="number" min="1" max="10" value="${idea.impact}" oninput="updateIdea(${idea.id}, 'impact', this.value, true)"></td>
+                    <td class="p-2"><input type="number" min="1" max="10" value="${idea.confidence}" oninput="updateIdea(${idea.id}, 'confidence', this.value, true)"></td>
+                    <td class="p-2"><input type="number" min="1" max="10" value="${idea.ease}" oninput="updateIdea(${idea.id}, 'ease', this.value, true)"></td>
                     <td class="p-2 text-center font-bold text-blue-600 bg-blue-50 border-l rtl:border-r rtl:border-l-0">${score}</td>
-                    <td class="p-2 text-center"><button onclick="removeIdea(${idea.id})" class="text-red-400 hover:text-red-600 transition"><i class="fas fa-trash"></i></button></td>
+                    <td class="p-2 text-center">
+                        <button onclick="removeIdea(${idea.id})" class="text-red-400 hover:text-red-600 transition" title="${translations[currentLang].btn_remove || 'Remove Idea'}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -1065,12 +1124,13 @@ ${formatInstruction}
 
                 const tr = document.createElement('tr');
                 tr.className = "border-b border-gray-100 hover:bg-gray-50 transition";
+                // Note: We use oninput for number fields and re-render the whole content to update the score/charts immediately.
                 tr.innerHTML = `
                     <td class="p-3 font-medium text-gray-700 text-start">${getName(idea)}</td>
-                    <td class="p-2"><input type="number" min="1" max="5" value="${idea.w_profit}" onchange="updateIdea(${idea.id}, 'w_profit', this.value)"></td>
-                    <td class="p-2"><input type="number" min="1" max="5" value="${idea.w_resil}" onchange="updateIdea(${idea.id}, 'w_resil', this.value)"></td>
-                    <td class="p-2"><input type="number" min="1" max="5" value="${idea.w_speed}" onchange="updateIdea(${idea.id}, 'w_speed', this.value)"></td>
-                    <td class="p-2"><input type="number" min="1" max="5" value="${idea.w_scale}" onchange="updateIdea(${idea.id}, 'w_scale', this.value)"></td>
+                    <td class="p-2"><input type="number" min="1" max="5" value="${idea.w_profit}" oninput="updateIdea(${idea.id}, 'w_profit', this.value, true)"></td>
+                    <td class="p-2"><input type="number" min="1" max="5" value="${idea.w_resil}" oninput="updateIdea(${idea.id}, 'w_resil', this.value, true)"></td>
+                    <td class="p-2"><input type="number" min="1" max="5" value="${idea.w_speed}" oninput="updateIdea(${idea.id}, 'w_speed', this.value, true)"></td>
+                    <td class="p-2"><input type="number" min="1" max="5" value="${idea.w_scale}" oninput="updateIdea(${idea.id}, 'w_scale', this.value, true)"></td>
                     <td class="p-2 text-center font-bold text-green-600 bg-green-50 text-lg border-l rtl:border-r rtl:border-l-0">${weightedScore}</td>
                 `;
                 tbody.appendChild(tr);
@@ -1085,16 +1145,17 @@ ${formatInstruction}
             ideas.forEach(idea => {
                 const div = document.createElement('div');
                 div.className = "bg-gray-50 p-2 rounded border border-gray-100 text-sm";
+                // Note: We use oninput for number fields and re-render the whole content to update the chart immediately.
                 div.innerHTML = `
                     <div class="font-bold mb-1 text-gray-700 truncate text-start">${getName(idea)}</div>
                     <div class="flex gap-2">
                         <div class="flex-1">
                             <label class="text-xs text-red-500 font-semibold block mb-1">${translations[currentLang].chart_risk} (X)</label>
-                            <input type="number" min="1" max="10" value="${idea.risk}" onchange="updateIdea(${idea.id}, 'risk', this.value)">
+                            <input type="number" min="1" max="10" value="${idea.risk}" oninput="updateIdea(${idea.id}, 'risk', this.value, true)">
                         </div>
                         <div class="flex-1">
                             <label class="text-xs text-green-600 font-semibold block mb-1">${translations[currentLang].chart_reward} (Y)</label>
-                            <input type="number" min="1" max="10" value="${idea.reward}" onchange="updateIdea(${idea.id}, 'reward', this.value)">
+                            <input type="number" min="1" max="10" value="${idea.reward}" oninput="updateIdea(${idea.id}, 'reward', this.value, true)">
                         </div>
                     </div>
                 `;
