@@ -8,11 +8,23 @@
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <!-- Fixed Lucide Script Source -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <!-- New Dependencies for Strategy Validator -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Combined Google Fonts: Vazirmatn for Persian, Inter for English -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Vazirmatn:wght@300;400;600;700&display=swap" rel="stylesheet">
+
     <style>
         body {
             font-family: 'Vazirmatn', sans-serif;
             background-color: #f8fafc;
         }
+        /* Style adjustments for LTR/RTL font switching in the new tool */
+        html[lang="en"] body { 
+            font-family: 'Inter', sans-serif; 
+        }
+
         .gradient-text {
             background: linear-gradient(to right, #4f46e5, #9333ea);
             -webkit-background-clip: text;
@@ -45,6 +57,24 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* --- New styles for Strategy Validator --- */
+        .tab-active { border-bottom: 2px solid #2563eb; color: #2563eb; font-weight: 600; }
+        .tab-inactive { color: #6b7280; font-weight: 400; }
+        .tab-inactive:hover { color: #374151; }
+        
+        input[type="number"] { width: 100%; padding: 4px; border: 1px solid #d1d5db; border-radius: 4px; text-align: center; }
+        input[type="number"]:focus { outline: none; border-color: #2563eb; ring: 2px; }
+        
+        th .subtitle { display: block; font-size: 0.75rem; color: #6b7280; font-weight: 400; margin-top: 2px; line-height: 1.1; }
+        
+        /* RTL Helper Overrides for Validator */
+        html[dir="rtl"] .rounded-r { border-top-right-radius: 0; border-bottom-right-radius: 0; border-top-left-radius: 0.25rem; border-bottom-left-radius: 0.25rem; }
+        html[dir="rtl"] .border-l-4 { border-left-width: 0; border-right-width: 4px; }
+        html[dir="rtl"] .mr-1 { margin-left: 0.25rem; margin-right: 0; }
+        html[dir="rtl"] .mr-2 { margin-left: 0.5rem; margin-right: 0; }
+        html[dir="rtl"] .ml-4 { margin-right: 1rem; margin-left: 0; }
+        html[dir="rtl"] .text-left { text-align: right; }
     </style>
 </head>
 <body class="text-slate-800 h-screen overflow-hidden flex">
@@ -71,6 +101,12 @@
                 <span class="font-medium">استراتژی وایرال</span>
             </button>
             
+            <!-- NEW TOOL NAVIGATION -->
+            <button onclick="showView('strategy-validator')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition-colors text-right group" id="nav-strategy">
+                <i data-lucide="bar-chart-3" class="w-5 h-5 group-hover:text-white"></i>
+                <span class="font-medium group-hover:text-white">اولویت‌بندی ایده‌های کسب‌وکاری</span>
+            </button>
+
             <button class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition-colors text-right opacity-60 cursor-not-allowed group">
                 <i data-lucide="pen-tool" class="w-5 h-5"></i>
                 <span>کپشن‌نویس (به‌زودی)</span>
@@ -160,7 +196,8 @@
                 سایر ابزارها
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Tool 2 (Coming Soon) -->
+                
+                <!-- Tool 2 (Caption Writer - Coming Soon) -->
                 <div class="bg-white rounded-2xl p-6 border border-slate-200 opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-not-allowed">
                     <div class="flex justify-between items-start mb-4">
                         <div class="w-12 h-12 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center">
@@ -172,19 +209,22 @@
                     <p class="text-sm text-slate-500">نوشتن کپشن‌های تعاملی اینستاگرام در ۳ ثانیه.</p>
                 </div>
 
-                <!-- Tool 3 (Coming Soon) -->
-                <div class="bg-white rounded-2xl p-6 border border-slate-200 opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-not-allowed">
+                <!-- Tool 3 (Strategy Validator - ACTIVE) -->
+                <div onclick="showView('strategy-validator')" class="bg-white rounded-2xl p-6 border border-slate-200 tool-card cursor-pointer group hover:border-blue-300">
                     <div class="flex justify-between items-start mb-4">
                         <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
-                            <i data-lucide="users" class="w-6 h-6"></i>
+                            <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
                         </div>
-                        <span class="bg-slate-100 text-slate-500 text-xs px-2 py-1 rounded-lg">به‌زودی</span>
+                        <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-lg font-bold">جدید!</span>
                     </div>
-                    <h3 class="font-bold text-lg mb-1">پرسونا ساز</h3>
-                    <p class="text-sm text-slate-500">شناسایی دقیق مخاطب هدف و علایق آنها.</p>
+                    <h3 class="font-bold text-lg mb-1">اولویت‌بندی ایده‌های کسب‌وکاری</h3>
+                    <p class="text-sm text-slate-500">تجزیه و تحلیل ایده‌ها با استفاده از متدهای ICE و Weighted Matrix.</p>
+                    <div class="mt-4 text-blue-600 text-xs font-semibold flex items-center gap-1">
+                        <i data-lucide="arrow-left" class="w-3 h-3"></i> شروع تحلیل
+                    </div>
                 </div>
 
-                <!-- Tool 4 (Coming Soon) -->
+                <!-- Tool 4 (Content Calendar - Coming Soon) -->
                 <div class="bg-white rounded-2xl p-6 border border-slate-200 opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-not-allowed">
                     <div class="flex justify-between items-start mb-4">
                         <div class="w-12 h-12 rounded-xl bg-green-100 text-green-600 flex items-center justify-center">
@@ -352,8 +392,222 @@
                 </div>
             </div>
         </div>
+
+        <!-- VIEW 3: STRATEGY VALIDATOR (New Tool) -->
+        <div id="view-strategy-validator" class="hidden min-h-full flex flex-col fade-in">
+            <div class="flex-1 max-w-7xl mx-auto w-full p-4 md:p-8">
+                <!-- Content from the new tool, adapted to fit the main app's flow -->
+                
+                <div class="bg-white shadow-lg rounded-xl overflow-hidden flex flex-col mb-8">
+                    
+                    <!-- Header -->
+                    <div class="bg-gray-900 text-white p-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="text-center md:text-start">
+                            <h1 class="text-2xl font-bold" data-i18n="app_title"><i class="fas fa-chess-board mr-2 rtl:ml-2"></i>اولویت‌بندی ایده‌های کسب‌وکاری</h1>
+                            <p class="text-gray-400 text-sm mt-1" data-i18n="app_subtitle">ایده‌ها را با استفاده از ICE، ماتریس وزنی و تحلیل ریسک/پاداش اولویت‌بندی کنید.</p>
+                        </div>
+                        
+                        <div class="flex flex-col items-center md:items-end gap-3">
+                            <!-- Lang Toggle -->
+                            <div class="bg-gray-800 rounded-lg p-1 flex">
+                                <button onclick="setLang('en')" id="btn-en" class="px-3 py-1 rounded text-xs font-bold text-gray-400 hover:text-white transition">English</button>
+                                <button onclick="setLang('fa')" id="btn-fa" class="px-3 py-1 rounded text-xs font-bold bg-blue-600 text-white transition">فارسی</button>
+                            </div>
+
+                            <div class="flex gap-2">
+                                <button onclick="addNewIdea()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg transition text-sm font-medium flex items-center">
+                                    <i class="fas fa-plus mr-1 rtl:ml-1"></i> <span data-i18n="btn_add">افزودن ایده</span>
+                                </button>
+                                <button onclick="window.print()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition text-sm font-medium flex items-center">
+                                    <i class="fas fa-print mr-1 rtl:ml-1"></i> <span data-i18n="btn_print">چاپ / PDF</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Tabs -->
+                    <div class="flex flex-wrap border-b border-gray-200 px-6">
+                        <button onclick="switchTab('ice')" id="tab-btn-ice" class="tab-active py-4 px-4 md:px-6 focus:outline-none text-sm md:text-base" data-i18n="tab_ice">
+                            ۱. امتیازدهی ICE (چابکی)
+                        </button>
+                        <button onclick="switchTab('weighted')" id="tab-btn-weighted" class="tab-inactive py-4 px-4 md:px-6 focus:outline-none text-sm md:text-base" data-i18n="tab_weighted">
+                            ۲. ماتریس وزنی (منطق)
+                        </button>
+                        <button onclick="switchTab('risk')" id="tab-btn-risk" class="tab-inactive py-4 px-4 md:px-6 focus:outline-none text-sm md:text-base" data-i18n="tab_risk">
+                            ۳. ریسک و پاداش (بصری)
+                        </button>
+                    </div>
+
+                    <!-- Content Area -->
+                    <div class="p-6 flex-grow">
+                        
+                        <!-- TAB 1: ICE SCORING -->
+                        <div id="tab-ice" class="block">
+                            <!-- Explainer Box -->
+                            <div class="bg-blue-50 border-l-4 rtl:border-r-4 border-blue-500 p-4 mb-6 rounded shadow-sm">
+                                <h3 class="font-bold text-blue-800 text-sm mb-1">
+                                    <i class="fas fa-info-circle mr-1 rtl:ml-1"></i> <span data-i18n="ice_explainer_title">چگونه ICE را درک کنیم</span>
+                                </h3>
+                                <p class="text-xs text-blue-700 leading-relaxed" data-i18n="ice_explainer_text">
+                                    این روش به شناسایی "بردهای سریع" کمک می‌کند. سه عامل را ضرب می‌کند.<br><strong>هدف:</strong> ایده‌هایی با تأثیر بالا و اجرای آسان را پیدا کنید. <span class="font-bold">امتیاز بالاتر = ایده بهتر.</span>
+                                </p>
+                            </div>
+
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4" data-i18n="ice_header">جدول اولویت‌بندی ICE</h2>
+                            
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left rtl:text-right border-collapse">
+                                    <thead>
+                                        <tr class="bg-gray-50 border-b align-top">
+                                            <th class="p-3 w-1/4 align-middle" data-i18n="th_idea">ایده کسب‌وکار</th>
+                                            <th class="p-3 text-center w-32">
+                                                <span data-i18n="th_impact">تأثیر</span>
+                                                <span class="subtitle" data-i18n="sub_impact">درآمد/پیروزی</span>
+                                            </th>
+                                            <th class="p-3 text-center w-32">
+                                                <span data-i18n="th_confidence">اطمینان</span>
+                                                <span class="subtitle" data-i18n="sub_confidence">قطعیت</span>
+                                            </th>
+                                            <th class="p-3 text-center w-32">
+                                                <span data-i18n="th_ease">سهولت</span>
+                                                <span class="subtitle" data-i18n="sub_ease">سادگی اجرا</span>
+                                            </th>
+                                            <th class="p-3 text-center w-32 bg-blue-50 font-bold border-l rtl:border-r rtl:border-l-0 align-middle">
+                                                <span data-i18n="th_score">امتیاز ICE</span>
+                                                <span class="subtitle font-normal">I × C × E</span>
+                                            </th>
+                                            <th class="p-3 w-10 align-middle"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ice-table-body">
+                                        <!-- Rows generated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="mt-8 h-64">
+                                <canvas id="iceChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- TAB 2: WEIGHTED MATRIX -->
+                        <div id="tab-weighted" class="hidden">
+                            <!-- Explainer Box -->
+                            <div class="bg-green-50 border-l-4 rtl:border-r-4 border-green-500 p-4 mb-6 rounded shadow-sm">
+                                <h3 class="font-bold text-green-800 text-sm mb-1">
+                                    <i class="fas fa-info-circle mr-1 rtl:ml-1"></i> <span data-i18n="weight_explainer_title">چگونه ماتریس وزنی را درک کنیم</span>
+                                </h3>
+                                <p class="text-xs text-green-700 leading-relaxed" data-i18n="weight_explainer_text">
+                                    این روش برای "منطق" است. همه معیارها برابر نیستند. در ایران، "تاب‌آوری" ممکن است ۲ برابر مهم‌تر از "مقیاس‌پذیری" باشد.<br><strong>هدف:</strong> درصدهای زیر را بر اساس اولویت خود تنظیم کنید.
+                                </p>
+                            </div>
+
+                            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 gap-4">
+                                <div>
+                                    <h2 class="text-xl font-semibold text-gray-800" data-i18n="weight_header">ماتریس تصمیم‌گیری وزنی</h2>
+                                </div>
+                                <!-- Weight Controls -->
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs w-full md:w-auto">
+                                    <div class="bg-white p-2 rounded border border-green-200 shadow-sm">
+                                        <label class="font-bold text-green-700" data-i18n="lbl_profit">سود ٪</label>
+                                        <input type="number" id="w1" value="30" onchange="updateWeights()" class="w-full mt-1">
+                                    </div>
+                                    <div class="bg-white p-2 rounded border border-red-200 shadow-sm">
+                                        <label class="font-bold text-red-700" data-i18n="lbl_resilience">تاب‌آوری ٪</label>
+                                        <input type="number" id="w2" value="40" onchange="updateWeights()" class="w-full mt-1">
+                                    </div>
+                                    <div class="bg-white p-2 rounded border border-yellow-200 shadow-sm">
+                                        <label class="font-bold text-yellow-700" data-i18n="lbl_speed">سرعت ٪</label>
+                                        <input type="number" id="w3" value="20" onchange="updateWeights()" class="w-full mt-1">
+                                    </div>
+                                    <div class="bg-white p-2 rounded border border-purple-200 shadow-sm">
+                                        <label class="font-bold text-purple-700" data-i18n="lbl_scale">مقیاس ٪</label>
+                                        <input type="number" id="w4" value="10" onchange="updateWeights()" class="w-full mt-1">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left rtl:text-right border-collapse">
+                                    <thead>
+                                        <tr class="bg-gray-50 border-b align-top">
+                                            <th class="p-3 w-1/4 align-middle" data-i18n="th_idea">ایده کسب‌وکار</th>
+                                            <th class="p-3 text-center">
+                                                <span data-i18n="th_profit">سود</span>
+                                                <span class="subtitle" data-i18n="sub_profit">درآمد مالی</span>
+                                            </th>
+                                            <th class="p-3 text-center">
+                                                <span data-i18n="th_resilience">تاب‌آوری</span>
+                                                <span class="subtitle" data-i18n="sub_resilience">امنیت در برابر تحریم</span>
+                                            </th>
+                                            <th class="p-3 text-center">
+                                                <span data-i18n="th_speed">سرعت</span>
+                                                <span class="subtitle" data-i18n="sub_speed">زمان عرضه</span>
+                                            </th>
+                                            <th class="p-3 text-center">
+                                                <span data-i18n="th_scale">مقیاس</span>
+                                                <span class="subtitle" data-i18n="sub_scale">رشد</span>
+                                            </th>
+                                            <th class="p-3 text-center bg-gray-100 font-bold border-l rtl:border-r rtl:border-l-0 align-middle">
+                                                <span data-i18n="th_total">مجموع</span>
+                                                <span class="subtitle font-normal" data-i18n="sub_total">امتیاز وزنی</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="weighted-table-body">
+                                        <!-- Rows generated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- TAB 3: RISK VS REWARD -->
+                        <div id="tab-risk" class="hidden">
+                            <!-- Explainer Box -->
+                            <div class="bg-purple-50 border-l-4 rtl:border-r-4 border-purple-500 p-4 mb-6 rounded shadow-sm">
+                                <h3 class="font-bold text-purple-800 text-sm mb-1">
+                                    <i class="fas fa-info-circle mr-1 rtl:ml-1"></i> <span data-i18n="risk_explainer_title">چگونه ریسک و پاداش را درک کنیم</span>
+                                </h3>
+                                <p class="text-xs text-purple-700 leading-relaxed" data-i18n="risk_explainer_text">
+                                    این یک نقشه بصری است. شما می‌خواهید در گوشه بالا-چپ (پاداش بالا، ریسک کم) باشید.<br><strong>اجتناب کنید:</strong> ریسک بالا با پاداش کم "تله مرگ" است.
+                                </p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="md:col-span-1 space-y-4">
+                                    <div class="bg-white border border-gray-200 rounded-lg p-4 h-fit">
+                                        <h3 class="font-bold text-gray-700 mb-3 border-b pb-2" data-i18n="risk_input_header">داده‌های ورودی</h3>
+                                        <div id="risk-inputs" class="space-y-4">
+                                            <!-- JS generates inputs here -->
+                                        </div>
+                                    </div>
+
+                                    <!-- Legend -->
+                                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                                        <h4 class="font-bold text-gray-700 text-xs uppercase mb-2" data-i18n="legend_title">راهنمای نواحی</h4>
+                                        <ul class="space-y-2 text-xs">
+                                            <li class="flex items-center"><span class="w-3 h-3 bg-green-500 rounded-full mr-2 rtl:ml-2 rtl:mr-0"></span> <strong data-i18n="leg_gold">بالا-چپ: ناحیه طلایی (بهترین)</strong></li>
+                                            <li class="flex items-center"><span class="w-3 h-3 bg-yellow-500 rounded-full mr-2 rtl:ml-2 rtl:mr-0"></span> <strong data-i18n="leg_moon">بالا-راست: پرتاب به ماه (ریسک بالا)</strong></li>
+                                            <li class="flex items-center"><span class="w-3 h-3 bg-blue-400 rounded-full mr-2 rtl:ml-2 rtl:mr-0"></span> <strong data-i18n="leg_safe">پایین-چپ: شرط‌های امن</strong></li>
+                                            <li class="flex items-center"><span class="w-3 h-3 bg-red-500 rounded-full mr-2 rtl:ml-2 rtl:mr-0"></span> <strong data-i18n="leg_death">پایین-راست: تله مرگ (اجتناب کنید)</strong></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="md:col-span-2 bg-white border border-gray-200 rounded-lg p-4 relative min-h-[400px]">
+                                    <canvas id="riskChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                
+            </div>
+        </div>
     </main>
 
+    <!-- JAVASCRIPT LOGIC -->
     <script>
         // Check if Lucide is loaded, if not, wait for it
         function initIcons() {
@@ -366,49 +620,64 @@
         }
         
         // Start checking when DOM is ready
-        document.addEventListener('DOMContentLoaded', initIcons);
+        document.addEventListener('DOMContentLoaded', () => {
+             initIcons();
+             showView('dashboard'); // Default view
+             setLang('fa'); // Initialize validator in default lang
+             // Render validator content only if active, otherwise it will render when view is shown
+        });
 
-        // View Navigation Logic
+        // --- View Navigation Logic ---
         function showView(viewName) {
-            const dashboard = document.getElementById('view-dashboard');
-            const viralTool = document.getElementById('view-viral-tool');
-            const navDashboard = document.getElementById('nav-dashboard');
-            const navViral = document.getElementById('nav-viral');
+            const views = {
+                'dashboard': document.getElementById('view-dashboard'),
+                'viral-tool': document.getElementById('view-viral-tool'),
+                'strategy-validator': document.getElementById('view-strategy-validator')
+            };
+            const navs = {
+                'dashboard': document.getElementById('nav-dashboard'),
+                'viral-tool': document.getElementById('nav-viral'),
+                'strategy-validator': document.getElementById('nav-strategy')
+            };
 
-            if (viewName === 'dashboard') {
-                dashboard.classList.remove('hidden');
-                viralTool.classList.add('hidden');
+            // Deactivate all
+            Object.keys(views).forEach(key => {
+                views[key].classList.add('hidden');
+                if (navs[key]) {
+                    navs[key].classList.remove('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-900/20');
+                    navs[key].classList.add('hover:bg-slate-800');
+                }
+            });
+
+            // Activate selected view
+            if (views[viewName]) {
+                views[viewName].classList.remove('hidden');
+                if (navs[viewName]) {
+                    navs[viewName].classList.add('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-900/20');
+                    navs[viewName].classList.remove('hover:bg-slate-800');
+                }
                 
-                // Update Sidebar Active State
-                navDashboard.classList.add('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-900/20');
-                navDashboard.classList.remove('hover:bg-slate-800');
-                
-                navViral.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-900/20');
-                navViral.classList.add('hover:bg-slate-800');
-            } else {
-                dashboard.classList.add('hidden');
-                viralTool.classList.remove('hidden');
-
-                // Update Sidebar Active State
-                navViral.classList.add('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-900/20');
-                navViral.classList.remove('hover:bg-slate-800');
-
-                navDashboard.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-900/20');
-                navDashboard.classList.add('hover:bg-slate-800');
+                // Specific initialization for the Strategy Validator
+                if (viewName === 'strategy-validator') {
+                     // Ensure the new tool is initialized and rendered
+                     if (typeof renderAll === 'function') {
+                        // Ensure it renders with the current language setting (default fa)
+                        renderAll();
+                     }
+                }
             }
         }
 
-        // Initialize default view logic (Ensure correct styling on load)
-        showView('dashboard');
-
-        // Prompt Generation Logic
+        // --- Viral Tool Prompt Generation Logic (Existing Code) ---
         function generatePrompt() {
             const business = document.getElementById('businessInput').value.trim();
             const customer = document.getElementById('customerInput').value.trim();
             const contentType = document.querySelector('input[name="contentType"]:checked').value;
             
+            // NOTE: Replaced alert() with console.error as per instructions.
             if (!business || !customer) {
-                alert('لطفاً حوزه کاری و مشخصات مشتریان را وارد کنید.');
+                console.error('لطفاً حوزه کاری و مشخصات مشتریان را وارد کنید.');
+                // Placeholder for custom modal or message box UI
                 return;
             }
 
@@ -513,6 +782,438 @@ ${formatInstruction}
             setTimeout(() => {
                 copyBtnText.innerText = originalText;
             }, 2000);
+        }
+
+        // ----------------------------------------------------------------------
+        // --- Strategy Validator Logic (New Code) ------------------------------
+        // ----------------------------------------------------------------------
+
+        const translations = {
+            en: {
+                app_title: '<i class="fas fa-chess-board mr-2 rtl:ml-2"></i>Business Idea Prioritization',
+                app_subtitle: 'Prioritize ideas using ICE, Weighted Matrix, and Risk/Reward Analysis.',
+                btn_add: 'Add Idea',
+                btn_print: 'Print/PDF',
+                tab_ice: '1. ICE Scoring (Agility)',
+                tab_weighted: '2. Weighted Matrix (Logic)',
+                tab_risk: '3. Risk vs Reward (Visual)',
+                // ICE Tab
+                ice_explainer_title: 'How to understand ICE',
+                ice_explainer_text: 'This method helps you identify "Quick Wins." It multiplies three factors to give a single score.<br><strong>The Goal:</strong> Find ideas that have high impact but are also easy to do. <span class="font-bold">Higher Score = Better Idea.</span>',
+                ice_header: 'ICE Prioritization Table',
+                th_idea: 'Business Idea',
+                th_impact: 'Impact',
+                sub_impact: 'Revenue/Win',
+                th_confidence: 'Confidence',
+                sub_confidence: 'Certainty',
+                th_ease: 'Ease',
+                sub_ease: 'Simplicity',
+                th_score: 'ICE Score',
+                // Weighted Tab
+                weight_explainer_title: 'How to understand Weighted Matrix',
+                weight_explainer_text: 'This method is for "Logic." Not all criteria are equal. In Iran, "Resilience" might be 2x more important than "Scalability."<br><strong>The Goal:</strong> Adjust percentages to match your priorities.',
+                weight_header: 'Weighted Decision Matrix',
+                lbl_profit: 'Profit %',
+                lbl_resilience: 'Resilience %',
+                lbl_speed: 'Speed %',
+                lbl_scale: 'Scale %',
+                th_profit: 'Profit',
+                sub_profit: 'Financial Upside',
+                th_resilience: 'Resilience',
+                sub_resilience: 'Sanction Safety',
+                th_speed: 'Speed',
+                sub_speed: 'Launch Time',
+                th_scale: 'Scale',
+                sub_scale: 'Growth',
+                th_total: 'Total',
+                sub_total: 'Weighted Score',
+                // Risk Tab
+                risk_explainer_title: 'How to understand Risk vs. Reward',
+                risk_explainer_text: 'This is a visual map. You want to be in the Top-Left (High Reward, Low Risk).<br><strong>Avoid the Bottom-Right:</strong> High risk with low reward is a "Death Trap."',
+                risk_input_header: 'Input Data',
+                legend_title: 'Zone Legend',
+                leg_gold: 'Top Left: Golden Zone (Best)',
+                leg_moon: 'Top Right: Moonshots (High Risk)',
+                leg_safe: 'Bottom Left: Safe Bets',
+                leg_death: 'Bottom Right: Death Trap',
+                // Chart Labels
+                chart_risk: 'Risk',
+                chart_reward: 'Reward'
+            },
+            fa: {
+                app_title: '<i class="fas fa-chess-board mr-2 rtl:ml-2"></i> اولویت‌بندی ایده‌های کسب‌وکاری',
+                app_subtitle: 'ایده‌ها را با استفاده از ICE، ماتریس وزنی و تحلیل ریسک/پاداش اولویت‌بندی کنید.',
+                btn_add: 'افزودن ایده',
+                btn_print: 'چاپ / PDF',
+                tab_ice: '۱. امتیازدهی ICE (چابکی)',
+                tab_weighted: '۲. ماتریس وزنی (منطق)',
+                tab_risk: '۳. ریسک و پاداش (بصری)',
+                // ICE Tab
+                ice_explainer_title: 'چگونه ICE را درک کنیم',
+                ice_explainer_text: 'این روش به شناسایی "بردهای سریع" کمک می‌کند. سه عامل را ضرب می‌کند.<br><strong>هدف:</strong> ایده‌هایی با تأثیر بالا و اجرای آسان را پیدا کنید. <span class="font-bold">امتیاز بالاتر = ایده بهتر.</span>',
+                ice_header: 'جدول اولویت‌بندی ICE',
+                th_idea: 'ایده کسب‌وکار',
+                th_impact: 'تأثیر',
+                sub_impact: 'درآمد/پیروزی',
+                th_confidence: 'اطمینان',
+                sub_confidence: 'قطعیت',
+                th_ease: 'سهولت',
+                sub_ease: 'سادگی اجرا',
+                th_score: 'امتیاز ICE',
+                // Weighted Tab
+                weight_explainer_title: 'چگونه ماتریس وزنی را درک کنیم',
+                weight_explainer_text: 'این روش برای "منطق" است. همه معیارها برابر نیستند. در ایران، "تاب‌آوری" ممکن است ۲ برابر مهم‌تر از "مقیاس‌پذیری" باشد.<br><strong>هدف:</strong> درصدهای زیر را بر اساس اولویت خود تنظیم کنید.',
+                weight_header: 'ماتریس تصمیم‌گیری وزنی',
+                lbl_profit: 'سود ٪',
+                lbl_resilience: 'تاب‌آوری ٪',
+                lbl_speed: 'سرعت ٪',
+                lbl_scale: 'مقیاس ٪',
+                th_profit: 'سود',
+                sub_profit: 'درآمد مالی',
+                th_resilience: 'تاب‌آوری',
+                sub_resilience: 'امنیت در برابر تحریم',
+                th_speed: 'سرعت',
+                sub_speed: 'زمان عرضه',
+                th_scale: 'مقیاس',
+                sub_scale: 'رشد',
+                th_total: 'مجموع',
+                sub_total: 'امتیاز وزنی',
+                // Risk Tab
+                risk_explainer_title: 'چگونه ریسک و پاداش را درک کنیم',
+                risk_explainer_text: 'این یک نقشه بصری است. شما می‌خواهید در گوشه بالا-چپ (پاداش بالا، ریسک کم) باشید.<br><strong>اجتناب کنید:</strong> ریسک بالا با پاداش کم "تله مرگ" است.',
+                risk_input_header: 'داده‌های ورودی',
+                legend_title: 'راهنمای نواحی',
+                leg_gold: 'بالا-چپ: ناحیه طلایی (بهترین)',
+                leg_moon: 'بالا-راست: پرتاب به ماه (ریسک بالا)',
+                leg_safe: 'پایین-چپ: شرط‌های امن',
+                leg_death: 'پایین-راست: تله مرگ (اجتناب کنید)',
+                // Chart Labels
+                chart_risk: 'ریسک',
+                chart_reward: 'پاداش'
+            }
+        };
+
+        let currentLang = 'fa'; // Default to Persian since the main app is RTL
+
+        // --- 1. State Management ---
+        let ideas = [
+            // 1. Online Tutoring Platform
+            { id: 1, name: "Online Tutoring Platform", name_fa: "پلتفرم تدریس آنلاین", impact: 7, confidence: 8, ease: 7, w_profit: 4, w_resil: 4, w_speed: 5, w_scale: 3, risk: 3, reward: 6 },
+            // 2. Specialty Coffee Roastery
+            { id: 2, name: "Specialty Coffee Roastery", name_fa: "روستری قهوه تخصصی", impact: 6, confidence: 6, ease: 5, w_profit: 3, w_resil: 3, w_speed: 4, w_scale: 2, risk: 5, reward: 5 },
+            // 3. Local Artisan Marketplace
+            { id: 3, name: "Local Artisan Marketplace", name_fa: "بازارچه هنرهای محلی", impact: 8, confidence: 5, ease: 4, w_profit: 4, w_resil: 5, w_speed: 2, w_scale: 4, risk: 4, reward: 7 },
+            // 4. SaaS for Small Businesses
+            { id: 4, name: "SaaS for Small Businesses", name_fa: "نرم‌افزار اشتراکی (SaaS) برای کسب‌وکارهای کوچک", impact: 9, confidence: 4, ease: 2, w_profit: 5, w_resil: 2, w_speed: 1, w_scale: 5, risk: 7, reward: 9 }
+        ];
+
+        let weights = { p: 0.3, r: 0.4, s: 0.2, sc: 0.1 };
+        let iceChartInstance = null;
+        let riskChartInstance = null;
+        
+        // --- 2. Localization and Rendering ---
+
+        function setLang(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'fa' ? 'rtl' : 'ltr';
+            
+            // Toggle Button Styles
+            const btnEn = document.getElementById('btn-en');
+            const btnFa = document.getElementById('btn-fa');
+
+            if(lang === 'en') {
+                btnEn.classList.add('bg-blue-600', 'text-white');
+                btnEn.classList.remove('text-gray-400', 'hover:text-white');
+                btnFa.classList.remove('bg-blue-600', 'text-white');
+                btnFa.classList.add('text-gray-400', 'hover:text-white');
+            } else {
+                btnFa.classList.add('bg-blue-600', 'text-white');
+                btnFa.classList.remove('text-gray-400', 'hover:text-white');
+                btnEn.classList.remove('bg-blue-600', 'text-white');
+                btnEn.classList.add('text-gray-400', 'hover:text-white');
+            }
+
+            // Update Static Text
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if(translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+
+            // Re-render Dynamic Content
+            renderAll();
+        }
+
+        function renderAll() {
+            renderICETable();
+            renderWeightedTable();
+            renderRiskInputs();
+            updateICEChart();
+            updateRiskChart();
+        }
+
+        function switchTab(tabId) {
+            ['ice', 'weighted', 'risk'].forEach(id => {
+                const tab = document.getElementById(`tab-${id}`);
+                if (tab) tab.classList.add('hidden');
+                
+                const btn = document.getElementById(`tab-btn-${id}`);
+                if (btn) {
+                    btn.classList.remove('tab-active');
+                    btn.classList.add('tab-inactive');
+                }
+            });
+            const selectedTab = document.getElementById(`tab-${tabId}`);
+            if (selectedTab) selectedTab.classList.remove('hidden');
+            
+            const selectedBtn = document.getElementById(`tab-btn-${tabId}`);
+            if (selectedBtn) {
+                selectedBtn.classList.add('tab-active');
+                selectedBtn.classList.remove('tab-inactive');
+            }
+        }
+
+        // --- 3. CRUD Operations ---
+        function addNewIdea() {
+            const newId = ideas.length > 0 ? Math.max(...ideas.map(i => i.id)) + 1 : 1;
+            const nameEn = `Idea ${newId}`;
+            const nameFa = `ایده ${newId}`;
+            
+            ideas.push({
+                id: newId,
+                name: nameEn,
+                name_fa: nameFa,
+                impact: 5, confidence: 5, ease: 5,
+                w_profit: 3, w_resil: 3, w_speed: 3, w_scale: 3,
+                risk: 5, reward: 5
+            });
+            renderAll();
+        }
+
+        function removeIdea(id) {
+            ideas = ideas.filter(i => i.id !== id);
+            renderAll();
+        }
+
+        function updateIdea(id, field, value) {
+            const idea = ideas.find(i => i.id === id);
+            if (idea) {
+                if (field === 'name') {
+                    // Update the name based on current language
+                    if(currentLang === 'fa') idea.name_fa = value;
+                    else idea.name = value;
+                }
+                else idea[field] = parseFloat(value) || 0;
+                renderAll(); 
+            }
+        }
+
+        function updateWeights() {
+            const w1 = parseFloat(document.getElementById('w1').value) || 0;
+            const w2 = parseFloat(document.getElementById('w2').value) || 0;
+            const w3 = parseFloat(document.getElementById('w3').value) || 0;
+            const w4 = parseFloat(document.getElementById('w4').value) || 0;
+            
+            const total = w1 + w2 + w3 + w4;
+            if(total === 0) return; 
+
+            weights = { p: w1 / 100, r: w2 / 100, s: w3 / 100, sc: w4 / 100 };
+            renderWeightedTable();
+        }
+
+        // --- 4. Rendering Table Logic ---
+
+        function getName(idea) {
+            return currentLang === 'fa' ? (idea.name_fa || idea.name) : idea.name;
+        }
+
+        // ICE Table
+        function renderICETable() {
+            const tbody = document.getElementById('ice-table-body');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            ideas.forEach(idea => {
+                const score = (idea.impact * idea.confidence * idea.ease);
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-gray-100 hover:bg-gray-50 transition";
+                tr.innerHTML = `
+                    <td class="p-2"><input type="text" value="${getName(idea)}" oninput="updateIdea(${idea.id}, 'name', this.value)" class="text-start font-medium bg-transparent border-none focus:ring-0 w-full hover:bg-white px-2 rounded"></td>
+                    <td class="p-2"><input type="number" min="1" max="10" value="${idea.impact}" onchange="updateIdea(${idea.id}, 'impact', this.value)"></td>
+                    <td class="p-2"><input type="number" min="1" max="10" value="${idea.confidence}" onchange="updateIdea(${idea.id}, 'confidence', this.value)"></td>
+                    <td class="p-2"><input type="number" min="1" max="10" value="${idea.ease}" onchange="updateIdea(${idea.id}, 'ease', this.value)"></td>
+                    <td class="p-2 text-center font-bold text-blue-600 bg-blue-50 border-l rtl:border-r rtl:border-l-0">${score}</td>
+                    <td class="p-2 text-center"><button onclick="removeIdea(${idea.id})" class="text-red-400 hover:text-red-600 transition"><i class="fas fa-trash"></i></button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Weighted Table
+        function renderWeightedTable() {
+            const tbody = document.getElementById('weighted-table-body');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            ideas.forEach(idea => {
+                const weightedScore = (
+                    (idea.w_profit * weights.p) +
+                    (idea.w_resil * weights.r) +
+                    (idea.w_speed * weights.s) +
+                    (idea.w_scale * weights.sc)
+                ).toFixed(1);
+
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-gray-100 hover:bg-gray-50 transition";
+                tr.innerHTML = `
+                    <td class="p-3 font-medium text-gray-700 text-start">${getName(idea)}</td>
+                    <td class="p-2"><input type="number" min="1" max="5" value="${idea.w_profit}" onchange="updateIdea(${idea.id}, 'w_profit', this.value)"></td>
+                    <td class="p-2"><input type="number" min="1" max="5" value="${idea.w_resil}" onchange="updateIdea(${idea.id}, 'w_resil', this.value)"></td>
+                    <td class="p-2"><input type="number" min="1" max="5" value="${idea.w_speed}" onchange="updateIdea(${idea.id}, 'w_speed', this.value)"></td>
+                    <td class="p-2"><input type="number" min="1" max="5" value="${idea.w_scale}" onchange="updateIdea(${idea.id}, 'w_scale', this.value)"></td>
+                    <td class="p-2 text-center font-bold text-green-600 bg-green-50 text-lg border-l rtl:border-r rtl:border-l-0">${weightedScore}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Risk Inputs
+        function renderRiskInputs() {
+            const container = document.getElementById('risk-inputs');
+            if (!container) return;
+            container.innerHTML = '';
+            ideas.forEach(idea => {
+                const div = document.createElement('div');
+                div.className = "bg-gray-50 p-2 rounded border border-gray-100 text-sm";
+                div.innerHTML = `
+                    <div class="font-bold mb-1 text-gray-700 truncate text-start">${getName(idea)}</div>
+                    <div class="flex gap-2">
+                        <div class="flex-1">
+                            <label class="text-xs text-red-500 font-semibold block mb-1">${translations[currentLang].chart_risk} (X)</label>
+                            <input type="number" min="1" max="10" value="${idea.risk}" onchange="updateIdea(${idea.id}, 'risk', this.value)">
+                        </div>
+                        <div class="flex-1">
+                            <label class="text-xs text-green-600 font-semibold block mb-1">${translations[currentLang].chart_reward} (Y)</label>
+                            <input type="number" min="1" max="10" value="${idea.reward}" onchange="updateIdea(${idea.id}, 'reward', this.value)">
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // --- 5. Charts Logic ---
+        
+        function updateICEChart() {
+            const ctx = document.getElementById('iceChart');
+            if (!ctx) return; // Guard clause
+            const dataScores = ideas.map(i => i.impact * i.confidence * i.ease);
+            const labels = ideas.map(i => getName(i));
+
+            if (iceChartInstance) iceChartInstance.destroy();
+
+            // Font family based on lang
+            const fontFamily = currentLang === 'fa' ? "'Vazirmatn', sans-serif" : "'Inter', sans-serif";
+
+            iceChartInstance = new Chart(ctx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: translations[currentLang].th_score,
+                        data: dataScores,
+                        backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { 
+                        y: { beginAtZero: true, ticks: { font: { family: fontFamily } } },
+                        x: { ticks: { font: { family: fontFamily } } }
+                    },
+                    plugins: {
+                        legend: { labels: { font: { family: fontFamily } } }
+                    }
+                }
+            });
+        }
+
+        function updateRiskChart() {
+            const ctx = document.getElementById('riskChart');
+            if (!ctx) return; // Guard clause
+            const fontFamily = currentLang === 'fa' ? "'Vazirmatn', sans-serif" : "'Inter', sans-serif";
+            const xLabel = translations[currentLang].chart_risk;
+            const yLabel = translations[currentLang].chart_reward;
+            
+            // Draw background quadrants
+            const backgroundPlugin = {
+                id: 'customBackground',
+                beforeDraw: (chart) => {
+                    const { ctx, chartArea: { left, top, right, bottom, width, height } } = chart;
+                    const midX = left + width / 2;
+                    const midY = top + height / 2;
+
+                    ctx.save();
+                    // Colors
+                    ctx.fillStyle = 'rgba(220, 252, 231, 0.3)'; ctx.fillRect(left, top, width/2, height/2); // Top Left (High Reward, Low Risk)
+                    ctx.fillStyle = 'rgba(254, 252, 232, 0.3)'; ctx.fillRect(midX, top, width/2, height/2); // Top Right (High Reward, High Risk)
+                    ctx.fillStyle = 'rgba(239, 246, 255, 0.3)'; ctx.fillRect(left, midY, width/2, height/2); // Bottom Left (Low Reward, Low Risk)
+                    ctx.fillStyle = 'rgba(254, 242, 242, 0.3)'; ctx.fillRect(midX, midY, width/2, height/2); // Bottom Right (Low Reward, High Risk)
+
+                    // Crosshair
+                    ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1; ctx.setLineDash([5, 5]);
+                    ctx.beginPath(); ctx.moveTo(midX, top); ctx.lineTo(midX, bottom); ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(left, midY); ctx.lineTo(right, midY); ctx.stroke();
+                    ctx.restore();
+                }
+            };
+
+            if (riskChartInstance) riskChartInstance.destroy();
+
+            riskChartInstance = new Chart(ctx.getContext('2d'), {
+                type: 'bubble',
+                data: {
+                    datasets: ideas.map((idea, index) => ({
+                        label: getName(idea),
+                        data: [{ x: idea.risk, y: idea.reward, r: 8 }],
+                        backgroundColor: `hsl(${index * 60}, 70%, 50%)`,
+                        borderColor: 'white',
+                        borderWidth: 2
+                    }))
+                },
+                plugins: [backgroundPlugin],
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { 
+                            title: { display: true, text: xLabel + ' ← (Low) | (High) →', font: {weight: 'bold', family: fontFamily} },
+                            min: 0, max: 10, grid: { display: false },
+                            ticks: { font: { family: fontFamily } }
+                        },
+                        y: { 
+                            title: { display: true, text: yLabel + ' ↑ (High) | (Low) ↓', font: {weight: 'bold', family: fontFamily} },
+                            min: 0, max: 10, grid: { display: false },
+                            ticks: { font: { family: fontFamily } }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { family: fontFamily } } },
+                        tooltip: {
+                            bodyFont: { family: fontFamily },
+                            titleFont: { family: fontFamily },
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ` (${xLabel}: ${context.raw.x}, ${yLabel}: ${context.raw.y})`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
         }
     </script>
 </body>
