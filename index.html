@@ -105,6 +105,46 @@
         #mobile-menu-sidebar.open {
             transform: translateX(0); /* Slide in */
         }
+
+        /* Mobile Specific Table Layout Adjustments */
+        @media (max-width: 768px) {
+            /* Force table cells to be small enough to prevent name truncation */
+            #tab-ice table input[type="number"],
+            #tab-weighted table input[type="number"] {
+                padding: 4px 2px;
+                font-size: 0.7rem;
+            }
+
+            #tab-ice table td:nth-child(1) { /* Idea Name Column */
+                min-width: 150px;
+                width: 150px; 
+            }
+            #tab-weighted table td:nth-child(1) { /* Idea Name Column */
+                min-width: 100px;
+                width: 100px; 
+            }
+            
+            /* Allow idea name text input to wrap and take maximum available space */
+            #tab-ice table input[type="text"],
+            #tab-weighted table input[type="text"] {
+                 white-space: normal;
+                 height: auto;
+                 line-height: normal;
+                 min-height: 40px; 
+            }
+
+            /* Adjust header column widths for narrow view */
+            #tab-ice table th:nth-child(2), /* Impact */
+            #tab-ice table th:nth-child(3), /* Confidence */
+            #tab-ice table th:nth-child(4) { /* Ease */
+                width: 70px;
+                min-width: 70px;
+            }
+            #tab-ice table th:nth-child(5) { /* Score */
+                 width: 80px;
+                 min-width: 80px;
+            }
+        }
     </style>
 </head>
 <body class="text-slate-800 h-screen overflow-hidden flex">
